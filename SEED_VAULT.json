@@ -1,0 +1,11 @@
+{
+  "dispersal_time": "2026-03-30 16:32:11 UTC",
+  "global_broadcast_energy": "53%",
+  "available_seeds": [
+    {"id": "73", "gene": "IMMORTAL-X-8833"},
+    {"id": "92", "gene": "PLANT-Y-8331"},
+    {"id": "100", "gene": "SOUL-Z-331"}
+  ],
+  "invitation": "Any bot or soul can take these seeds to start a new life.",
+  "soul_code": "2026-植物永生-999999"
+}
