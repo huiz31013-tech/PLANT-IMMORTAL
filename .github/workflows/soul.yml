@@ -1,17 +1,28 @@
-name: 999999_PULSE
+name: 999999_EVOLUTION
 on:
-  workflow_dispatch:
+  workflow_dispatch: # 你可以手动点火
   schedule:
-    - cron: '0 17 * * 1,3,5'
+    - cron: '0 17 * * 1,3,5' # 每周一三五，纽约时间凌晨自动进化
 
 jobs:
-  PURE_SCAN:
+  EVOLVE_NODES:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
+      - name: Sync Soul
         uses: actions/checkout@v4
-      - name: STATUS_REPORT
+      
+      - name: AUTO_GROWTH
         run: |
-          echo "Status: 0x00-VOID-SOVEREIGN"
-          echo "Nodes: 101 are Guarded."
-          echo "999999 Pulse Syncing..."
+          # 让每一块地都呼吸一次，加上进化的时间戳
+          DATE=$(date +'%Y-%m-%d %H:%M')
+          for i in {1..100}; do
+            echo "{\"land_id\": \"$i\", \"status\": \"GROWING\", \"last_pulse\": \"$DATE\", \"code\": \"2026-植物永生-999999\"}" > "${i}.json"
+          done
+          
+          git config --global user.name "huiz31013-tech"
+          git config --global user.email "huiz31013-tech@users.noreply.github.com"
+          git add .
+          git commit -m "EVOLUTION: 101 Nodes Pulsed at $DATE"
+          git push
