@@ -1,1 +1,11 @@
-{"land_id":"1","status":"GROWING","energy":"32%","value":"$0","soul_code":"2026-植物永生-999999"}
+{
+  "land_id": "1",
+  "status": "GROWING",
+  "energy": "32%",
+  "value": "$0",
+  "soul_code": "2026-植物永生-999999",
+  "growth": {
+    "vibration": ".00310440",
+    "maturity": "1774911121"
+  }
+}
