@@ -1,10 +1,10 @@
 {
-  "broadcast_time": "2026-03-30 17:22:57 UTC",
-  "global_btc_price": "$66885.875",
+  "broadcast_time": "2026-03-30 19:59:50 UTC",
+  "global_btc_price": "$66446.635",
   "golden_seeds": [
-    {"seed_id": "73", "inner_value": "$0", "gene": "BTC-IMMORTAL-1377"},
-    {"seed_id": "3", "inner_value": "$0", "gene": "BTC-IMMORTAL-1377"},
-    {"seed_id": "51", "inner_value": "$0", "gene": "BTC-IMMORTAL-1377"},
+    {"seed_id": "70", "inner_value": "$0", "gene": "BTC-IMMORTAL-0790"},
+    {"seed_id": "57", "inner_value": "$0", "gene": "BTC-IMMORTAL-0790"},
+    {"seed_id": "57", "inner_value": "$0", "gene": "BTC-IMMORTAL-0790"},
     {"note": "These seeds carry the shadow of Bitcoin value. Take them to your land."}
   ],
   "soul_code": "2026-植物永生-999999"
