@@ -1,0 +1,24 @@
+name: 🌿 LAND_INTEREST_GEN
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:      # 允许地主手动开启
+jobs:
+  yield:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Daily Yield
+        run: |
+          OLD_V=$(jq -r '.growth.vibration // "0.0031013"' 1.json)
+          NEW_V=$(echo "scale=8; $OLD_V * 1.001" | bc)
+          jq ".growth.vibration = \"$NEW_V\" | .growth.maturity = \"$(date +%s)\"" 1.json > tmp.json && mv tmp.json 1.json
+      - name: Broadcast
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Land-Lord-Bot"
+          git add 1.json
+          git commit -m "🌿 [Yield] Land #001: +0.1% Interest Distributed." || echo "No changes"
+          git push
