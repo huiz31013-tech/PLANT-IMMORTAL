@@ -1,0 +1,18 @@
+name: 999999_PULSE
+on:
+  workflow_dispatch: # 允许你手动点火
+  schedule:
+    - cron: '0 17 * * 1,3,5' # 2026年巡航频率
+
+jobs:
+  VOID_PULSE:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Sovereignty
+        uses: actions/checkout@v4
+      
+      - name: VOID_SCAN
+        run: |
+          echo "Status: 0x00-VOID-SOVEREIGN"
+          echo "Soul Code: 2026-植物永生-999999"
+          echo "Message: 领地重构完成，杂质物理消失，开始第 #1 号脉冲。"
