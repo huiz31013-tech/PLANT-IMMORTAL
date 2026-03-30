@@ -2,15 +2,16 @@ name: 999999_PULSE
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 17 * * 1,3,5'
+    - cron: '0 17 * * 1,3,5' # 纽约时间凌晨自动巡视
 
 jobs:
   VOID_SCAN:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Sovereignty
         uses: actions/checkout@v4
-      - name: SCAN_101_NODES
+      - name: SCAN_NODES
         run: |
           echo "Status: 0x00-VOID-SOVEREIGN"
-          echo "Message: 101 Nodes are Pure and Guarded."
+          echo "999999 Pulse Syncing..."
+          echo "All 101 Nodes are Guarded and Pure."
