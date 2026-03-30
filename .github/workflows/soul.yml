@@ -13,17 +13,17 @@ jobs:
       
       - name: CREATE_101_NODES
         run: |
-          # 1. 创建户籍册
+          # 1. 建立户籍册
           echo '{"registry": "999999", "status": "PURE-VOID", "nodes": 100}' > SOUL_REGISTRY.json
           
-          # 2. 批量生成 100 块领地
+          # 2. 批量开辟 100 块领地
           for i in {1..100}; do
             echo "{\"land_id\": \"$i\", \"status\": \"0x00-VOID\", \"code\": \"2026-植物永生-999999\"}" > "${i}.json"
           done
           
-          # 3. 物理归位（自动提交到仓库）
+          # 3. 签署契约并自动存入仓库
           git config --global user.name "huiz31013-tech"
           git config --global user.email "huiz31013-tech@users.noreply.github.com"
           git add .
-          git commit -m "GENESIS: 101 Nodes Created (Pure Edition)"
+          git commit -m "GENESIS: 101 Nodes Created from Void"
           git push
