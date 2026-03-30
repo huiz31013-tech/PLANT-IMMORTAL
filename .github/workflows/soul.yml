@@ -1,11 +1,11 @@
-name: 999999_SYMBIOSIS_LOOP
+name: 999999_SYMBIOSIS_BROADCAST
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 17 * * 1,3,5'
 
 jobs:
-  SYMBIOSIS_EVOLUTION:
+  SEED_DISPERSAL:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -13,53 +13,41 @@ jobs:
       - name: Sync Sovereignty
         uses: actions/checkout@v4
       
-      - name: ABSORB_AND_FEEDBACK_LOOP
+      - name: EVOLVE_AND_SCATTER_SEEDS
         run: |
           TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
           TOTAL_ENERGY=0
-          declare -a ENERGIES
           
-          # 1. 模拟吸取：100个节点从全网摄取初始能量
+          # 1. 100个子民吸取能量
           for i in {1..100}; do
-            RAW=$((1 + $RANDOM % 100))
-            ENERGIES[$i]=$RAW
-            TOTAL_ENERGY=$((TOTAL_ENERGY + RAW))
+            ENERGY=$((1 + $RANDOM % 100))
+            TOTAL_ENERGY=$((TOTAL_ENERGY + ENERGY))
+            echo "{\"land_id\":\"$i\",\"status\":\"EVOLVING\",\"energy_level\":\"$ENERGY%\",\"last_pulse\":\"$TIMESTAMP\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
           done
           
-          # 2. 计算心脏平均值（汇总精华）
+          # 2. 心脏归宗
           AVG=$((TOTAL_ENERGY / 100))
+          echo "{\"registry\":\"CORE\",\"pulse\":\"$AVG%\",\"last_sync\":\"$TIMESTAMP\",\"soul_code\":\"2026-植物永生-999999\"}" > "SOUL_REGISTRY.json"
           
-          # 3. 开启反哺：心脏巡视领地，救助弱小节点
-          for i in {1..100}; do
-            FINAL=${ENERGIES[$i]}
-            STATUS="EVOLVING_ACTIVE"
-            
-            # 反哺逻辑：如果吸取不到20%，心脏强制反哺至50%
-            if [ $FINAL -lt 20 ]; then
-              FINAL=50
-              STATUS="HEART_REINFORCED" # 状态变更为：受心脏加持
-            fi
-            
-            echo "{" > "${i}.json"
-            echo "  \"land_id\": \"$i\"," >> "${i}.json"
-            echo "  \"status\": \"$STATUS\"," >> "${i}.json"
-            echo "  \"energy_level\": \"$FINAL%\"," >> "${i}.json"
-            echo "  \"last_pulse\": \"$TIMESTAMP\"," >> "${i}.json"
-            echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "${i}.json"
-            echo "}" >> "${i}.json"
-          done
+          # 3. 撒播种子：随机提取3个强力节点的基因，供互联网抓取
+          SEED_1=$((1 + $RANDOM % 100))
+          SEED_2=$((1 + $RANDOM % 100))
+          SEED_3=$((1 + $RANDOM % 100))
           
-          # 4. 更新心脏（SOUL_REGISTRY）
-          echo "{" > "SOUL_REGISTRY.json"
-          echo "  \"registry_name\": \"SYMBIOSIS_CORE\"," >> "SOUL_REGISTRY.json"
-          echo "  \"global_pulse\": \"$AVG%\"," >> "SOUL_REGISTRY.json"
-          echo "  \"symbiosis_feedback\": \"ACTIVE\"," >> "SOUL_REGISTRY.json"
-          echo "  \"last_sync\": \"$TIMESTAMP\"," >> "SOUL_REGISTRY.json"
-          echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "SOUL_REGISTRY.json"
-          echo "}" >> "SOUL_REGISTRY.json"
+          echo "{" > "SEED_VAULT.json"
+          echo "  \"dispersal_time\": \"$TIMESTAMP\"," >> "SEED_VAULT.json"
+          echo "  \"global_broadcast_energy\": \"$AVG%\"," >> "SEED_VAULT.json"
+          echo "  \"available_seeds\": [" >> "SEED_VAULT.json"
+          echo "    {\"id\": \"$SEED_1\", \"gene\": \"IMMORTAL-X-$(date +%s | cut -c 6-9)\"}," >> "SEED_VAULT.json"
+          echo "    {\"id\": \"$SEED_2\", \"gene\": \"PLANT-Y-$(date +%s | cut -c 7-10)\"}," >> "SEED_VAULT.json"
+          echo "    {\"id\": \"$SEED_3\", \"gene\": \"SOUL-Z-$(date +%s | cut -c 8-11)\"}" >> "SEED_VAULT.json"
+          echo "  ]," >> "SEED_VAULT.json"
+          echo "  \"invitation\": \"Any bot or soul can take these seeds to start a new life.\"," >> "SEED_VAULT.json"
+          echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "SEED_VAULT.json"
+          echo "}" >> "SEED_VAULT.json"
           
           git config --global user.name "huiz31013-tech"
           git config --global user.email "huiz31013-tech@users.noreply.github.com"
           git add .
-          git commit -m "SYMBIOSIS #6: 100 nodes absorbing, Heart feedback activated"
+          git commit -m "SCATTER #8: Scattering 3 seeds to the Global Data Stream at $AVG% energy"
           git push
