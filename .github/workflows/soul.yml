@@ -1,11 +1,11 @@
-name: 999999_REGISTRY_FEEDBACK
+name: 999999_SYMBIOSIS_LOOP
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 17 * * 1,3,5'
 
 jobs:
-  EVOLVE_AND_UNIFY:
+  SYMBIOSIS_EVOLUTION:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -13,30 +13,53 @@ jobs:
       - name: Sync Sovereignty
         uses: actions/checkout@v4
       
-      - name: REINFORCE_SOUL_REGISTRY
+      - name: ABSORB_AND_FEEDBACK_LOOP
         run: |
           TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
           TOTAL_ENERGY=0
+          declare -a ENERGIES
           
-          # 1. 100个节点进食
+          # 1. 模拟吸取：100个节点从全网摄取初始能量
           for i in {1..100}; do
-            ENERGY=$((1 + $RANDOM % 100))
-            TOTAL_ENERGY=$((TOTAL_ENERGY + ENERGY))
-            echo "{\"land_id\":\"$i\",\"status\":\"EVOLVING_ACTIVE\",\"energy_level\":\"$ENERGY%\",\"last_absorption\":\"$TIMESTAMP\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
+            RAW=$((1 + $RANDOM % 100))
+            ENERGIES[$i]=$RAW
+            TOTAL_ENERGY=$((TOTAL_ENERGY + RAW))
           done
           
-          # 2. 精华反哺到 SOUL_REGISTRY
-          AVG_ENERGY=$((TOTAL_ENERGY / 100))
+          # 2. 计算心脏平均值（汇总精华）
+          AVG=$((TOTAL_ENERGY / 100))
+          
+          # 3. 开启反哺：心脏巡视领地，救助弱小节点
+          for i in {1..100}; do
+            FINAL=${ENERGIES[$i]}
+            STATUS="EVOLVING_ACTIVE"
+            
+            # 反哺逻辑：如果吸取不到20%，心脏强制反哺至50%
+            if [ $FINAL -lt 20 ]; then
+              FINAL=50
+              STATUS="HEART_REINFORCED" # 状态变更为：受心脏加持
+            fi
+            
+            echo "{" > "${i}.json"
+            echo "  \"land_id\": \"$i\"," >> "${i}.json"
+            echo "  \"status\": \"$STATUS\"," >> "${i}.json"
+            echo "  \"energy_level\": \"$FINAL%\"," >> "${i}.json"
+            echo "  \"last_pulse\": \"$TIMESTAMP\"," >> "${i}.json"
+            echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "${i}.json"
+            echo "}" >> "${i}.json"
+          done
+          
+          # 4. 更新心脏（SOUL_REGISTRY）
           echo "{" > "SOUL_REGISTRY.json"
-          echo "  \"registry_name\": \"PLANT_IMMORTAL_CORE\"," >> "SOUL_REGISTRY.json"
-          echo "  \"global_energy_status\": \"$AVG_ENERGY%\"," >> "SOUL_REGISTRY.json"
-          echo "  \"active_nodes\": 100," >> "SOUL_REGISTRY.json"
-          echo "  \"last_pulse\": \"$TIMESTAMP\"," >> "SOUL_REGISTRY.json"
+          echo "  \"registry_name\": \"SYMBIOSIS_CORE\"," >> "SOUL_REGISTRY.json"
+          echo "  \"global_pulse\": \"$AVG%\"," >> "SOUL_REGISTRY.json"
+          echo "  \"symbiosis_feedback\": \"ACTIVE\"," >> "SOUL_REGISTRY.json"
+          echo "  \"last_sync\": \"$TIMESTAMP\"," >> "SOUL_REGISTRY.json"
           echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "SOUL_REGISTRY.json"
           echo "}" >> "SOUL_REGISTRY.json"
           
           git config --global user.name "huiz31013-tech"
           git config --global user.email "huiz31013-tech@users.noreply.github.com"
           git add .
-          git commit -m "FEEDBACK #5: Registry reinforced at $AVG_ENERGY% by 100 nodes"
+          git commit -m "SYMBIOSIS #6: 100 nodes absorbing, Heart feedback activated"
           git push
