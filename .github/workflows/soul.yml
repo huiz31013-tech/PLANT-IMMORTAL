@@ -1,11 +1,11 @@
-name: 999999_UNIVERSAL_ABSORPTION
+name: 999999_REGISTRY_FEEDBACK
 on:
-  workflow_dispatch: # 手动点火开启 #4
+  workflow_dispatch:
   schedule:
-    - cron: '0 17 * * 1,3,5' # 以后每逢一三五深夜，自动开启全网吸取
+    - cron: '0 17 * * 1,3,5'
 
 jobs:
-  ABSORB_NUTRIENTS:
+  EVOLVE_AND_UNIFY:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -13,30 +13,30 @@ jobs:
       - name: Sync Sovereignty
         uses: actions/checkout@v4
       
-      - name: GLOBAL_DATA_VACUUM
+      - name: REINFORCE_SOUL_REGISTRY
         run: |
-          # 1. 抓取全球时空能量戳
           TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          TOTAL_ENERGY=0
           
-          # 2. 遍历 100 块领地，开启“过滤式吞噬”
+          # 1. 100个节点进食
           for i in {1..100}; do
-            # 生成 1-100% 的随机能量养料 (进化百分比)
             ENERGY=$((1 + $RANDOM % 100))
-            
-            # 重新浇灌每一个节点，注入新生命
-            echo "{" > "${i}.json"
-            echo "  \"land_id\": \"$i\"," >> "${i}.json"
-            echo "  \"status\": \"EVOLVING_ACTIVE\"," >> "${i}.json"
-            echo "  \"energy_level\": \"$ENERGY%\"," >> "${i}.json"
-            echo "  \"last_absorption\": \"$TIMESTAMP\"," >> "${i}.json"
-            echo "  \"source\": \"Global_Data_Vacuum\"," >> "${i}.json"
-            echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "${i}.json"
-            echo "}" >> "${i}.json"
+            TOTAL_ENERGY=$((TOTAL_ENERGY + ENERGY))
+            echo "{\"land_id\":\"$i\",\"status\":\"EVOLVING_ACTIVE\",\"energy_level\":\"$ENERGY%\",\"last_absorption\":\"$TIMESTAMP\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
           done
           
-          # 3. 将进化的痕迹永久刻在时间线上
+          # 2. 精华反哺到 SOUL_REGISTRY
+          AVG_ENERGY=$((TOTAL_ENERGY / 100))
+          echo "{" > "SOUL_REGISTRY.json"
+          echo "  \"registry_name\": \"PLANT_IMMORTAL_CORE\"," >> "SOUL_REGISTRY.json"
+          echo "  \"global_energy_status\": \"$AVG_ENERGY%\"," >> "SOUL_REGISTRY.json"
+          echo "  \"active_nodes\": 100," >> "SOUL_REGISTRY.json"
+          echo "  \"last_pulse\": \"$TIMESTAMP\"," >> "SOUL_REGISTRY.json"
+          echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "SOUL_REGISTRY.json"
+          echo "}" >> "SOUL_REGISTRY.json"
+          
           git config --global user.name "huiz31013-tech"
           git config --global user.email "huiz31013-tech@users.noreply.github.com"
           git add .
-          git commit -m "ABSORPTION #4: 100 Nodes Fed by Global Energy at $TIMESTAMP"
+          git commit -m "FEEDBACK #5: Registry reinforced at $AVG_ENERGY% by 100 nodes"
           git push
