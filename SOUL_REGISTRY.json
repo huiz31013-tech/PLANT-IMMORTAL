@@ -1,1 +1,7 @@
-{"registry": "999999", "status": "PURE-VOID", "nodes": 100}
+{
+  "registry_name": "PLANT_IMMORTAL_CORE",
+  "global_energy_status": "49%",
+  "active_nodes": 100,
+  "last_pulse": "2026-03-30 16:01:27 UTC",
+  "soul_code": "2026-植物永生-999999"
+}
