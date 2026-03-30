@@ -1,11 +1,11 @@
-name: 999999_BITCOIN_FRUIT_YIELD
+name: 999999_WEALTH_SEED_BROADCAST
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 17 * * 1,3,5'
 
 jobs:
-  TREASURY_EVOLUTION:
+  WEALTH_EVOLUTION:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -13,44 +13,43 @@ jobs:
       - name: Sync Sovereignty
         uses: actions/checkout@v4
 
-      - name: HARVEST_BTC_FRUITS
+      - name: EVOLVE_GOLDEN_SEEDS
         run: |
-          # 1. 接入互联网脉搏：获取实时 BTC 价格 (USD)
+          # 1. 抓取比特币全网共鸣价格
           BTC_USD=$(curl -s https://api.coinbase.com/v2/prices/BTC-USD/spot | jq -r '.data.amount')
           TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
-          TOTAL_VIRTUAL_VALUE=0
-          FRUIT_COUNT=0
           
-          # 2. 巡视 100 块地
+          # 2. 100块地进化，产出金果
+          TOTAL_VALUE=0
           for i in {1..100}; do
             ENERGY=$((1 + $RANDOM % 100))
-            STATUS="GROWING"
-            BITCOIN_VALUE="0"
-            
-            # 结实逻辑：能量极高的节点结出等值果实
             if [ $ENERGY -gt 90 ]; then
-              # 计算该节点的虚拟财富映射：能量占比 * 实时金价
-              BITCOIN_VALUE=$(echo "scale=4; $ENERGY / 100 * $BTC_USD" | bc)
-              STATUS="FRUITING_BTC"
-              FRUIT_COUNT=$((FRUIT_COUNT + 1))
-              TOTAL_VIRTUAL_VALUE=$(echo "$TOTAL_VIRTUAL_VALUE + $BITCOIN_VALUE" | bc)
+              VALUE=$(echo "scale=4; $ENERGY / 100 * $BTC_USD" | bc)
+              TOTAL_VALUE=$(echo "$TOTAL_VALUE + $VALUE" | bc)
+              echo "{\"land_id\":\"$i\",\"status\":\"FRUITING_BTC\",\"energy\":\"$ENERGY%\",\"value\":\"\$$VALUE\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
+            else
+              echo "{\"land_id\":\"$i\",\"status\":\"GROWING\",\"energy\":\"$ENERGY%\",\"value\":\"\$0\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
             fi
-            
-            echo "{\"land_id\":\"$i\",\"status\":\"$STATUS\",\"energy\":\"$ENERGY%\",\"btc_mapped_value\":\"\$$BITCOIN_VALUE\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
           done
-          
-          # 3. 归宗：铸造领地金库 (Treasury)
-          echo "{" > "TREASURY_RESERVE.json"
-          echo "  \"reserve_name\": \"GOLDEN_PLANT_BANK\"," >> "TREASURY_RESERVE.json"
-          echo "  \"current_btc_spot\": \"\$$BTC_USD\"," >> "TREASURY_RESERVE.json"
-          echo "  \"total_land_wealth\": \"\$$TOTAL_VIRTUAL_VALUE\"," >> "TREASURY_RESERVE.json"
-          echo "  \"harvested_fruits\": $FRUIT_COUNT," >> "TREASURY_RESERVE.json"
-          echo "  \"last_harvest\": \"$TIMESTAMP\"," >> "TREASURY_RESERVE.json"
-          echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "TREASURY_RESERVE.json"
-          echo "}" >> "TREASURY_RESERVE.json"
-          
+
+          # 3. 散播：将最强的3颗“金果”化为种子抛向全网
+          echo "{" > "SEED_VAULT.json"
+          echo "  \"broadcast_time\": \"$TIMESTAMP\"," >> "SEED_VAULT.json"
+          echo "  \"global_btc_price\": \"\$$BTC_USD\"," >> "SEED_VAULT.json"
+          echo "  \"golden_seeds\": [" >> "SEED_VAULT.json"
+          # 随机挑三个带价值的种子
+          for j in {1..3}; do
+            RAND_ID=$((1 + $RANDOM % 100))
+            V_VAL=$(echo "scale=2; ($RANDOM % 100) / 100 * $BTC_USD" | bc)
+            echo "    {\"seed_id\": \"$RAND_ID\", \"inner_value\": \"\$$V_VAL\", \"gene\": \"BTC-IMMORTAL-$(date +%s | tail -c 5)\"}," >> "SEED_VAULT.json"
+          done
+          echo "    {\"note\": \"These seeds carry the shadow of Bitcoin value. Take them to your land.\"}" >> "SEED_VAULT.json"
+          echo "  ]," >> "SEED_VAULT.json"
+          echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "SEED_VAULT.json"
+          echo "}" >> "SEED_VAULT.json"
+
           git config --global user.name "huiz31013-tech"
           git config --global user.email "huiz31013-tech@users.noreply.github.com"
           git add .
-          git commit -m "HARVEST #9: $FRUIT_COUNT BTC fruits ripened. Total Value: \$$TOTAL_VIRTUAL_VALUE"
+          git commit -m "WEALTH #10: Broadcasting 3 Golden Seeds. Global Value Pulse: \$$TOTAL_VALUE"
           git push
