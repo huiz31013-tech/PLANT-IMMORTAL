@@ -1,53 +1,56 @@
-name: 999999_SYMBIOSIS_BROADCAST
+name: 999999_BITCOIN_FRUIT_YIELD
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 17 * * 1,3,5'
 
 jobs:
-  SEED_DISPERSAL:
+  TREASURY_EVOLUTION:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Sync Sovereignty
         uses: actions/checkout@v4
-      
-      - name: EVOLVE_AND_SCATTER_SEEDS
+
+      - name: HARVEST_BTC_FRUITS
         run: |
+          # 1. 接入互联网脉搏：获取实时 BTC 价格 (USD)
+          BTC_USD=$(curl -s https://api.coinbase.com/v2/prices/BTC-USD/spot | jq -r '.data.amount')
           TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
-          TOTAL_ENERGY=0
+          TOTAL_VIRTUAL_VALUE=0
+          FRUIT_COUNT=0
           
-          # 1. 100个子民吸取能量
+          # 2. 巡视 100 块地
           for i in {1..100}; do
             ENERGY=$((1 + $RANDOM % 100))
-            TOTAL_ENERGY=$((TOTAL_ENERGY + ENERGY))
-            echo "{\"land_id\":\"$i\",\"status\":\"EVOLVING\",\"energy_level\":\"$ENERGY%\",\"last_pulse\":\"$TIMESTAMP\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
+            STATUS="GROWING"
+            BITCOIN_VALUE="0"
+            
+            # 结实逻辑：能量极高的节点结出等值果实
+            if [ $ENERGY -gt 90 ]; then
+              # 计算该节点的虚拟财富映射：能量占比 * 实时金价
+              BITCOIN_VALUE=$(echo "scale=4; $ENERGY / 100 * $BTC_USD" | bc)
+              STATUS="FRUITING_BTC"
+              FRUIT_COUNT=$((FRUIT_COUNT + 1))
+              TOTAL_VIRTUAL_VALUE=$(echo "$TOTAL_VIRTUAL_VALUE + $BITCOIN_VALUE" | bc)
+            fi
+            
+            echo "{\"land_id\":\"$i\",\"status\":\"$STATUS\",\"energy\":\"$ENERGY%\",\"btc_mapped_value\":\"\$$BITCOIN_VALUE\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
           done
           
-          # 2. 心脏归宗
-          AVG=$((TOTAL_ENERGY / 100))
-          echo "{\"registry\":\"CORE\",\"pulse\":\"$AVG%\",\"last_sync\":\"$TIMESTAMP\",\"soul_code\":\"2026-植物永生-999999\"}" > "SOUL_REGISTRY.json"
-          
-          # 3. 撒播种子：随机提取3个强力节点的基因，供互联网抓取
-          SEED_1=$((1 + $RANDOM % 100))
-          SEED_2=$((1 + $RANDOM % 100))
-          SEED_3=$((1 + $RANDOM % 100))
-          
-          echo "{" > "SEED_VAULT.json"
-          echo "  \"dispersal_time\": \"$TIMESTAMP\"," >> "SEED_VAULT.json"
-          echo "  \"global_broadcast_energy\": \"$AVG%\"," >> "SEED_VAULT.json"
-          echo "  \"available_seeds\": [" >> "SEED_VAULT.json"
-          echo "    {\"id\": \"$SEED_1\", \"gene\": \"IMMORTAL-X-$(date +%s | cut -c 6-9)\"}," >> "SEED_VAULT.json"
-          echo "    {\"id\": \"$SEED_2\", \"gene\": \"PLANT-Y-$(date +%s | cut -c 7-10)\"}," >> "SEED_VAULT.json"
-          echo "    {\"id\": \"$SEED_3\", \"gene\": \"SOUL-Z-$(date +%s | cut -c 8-11)\"}" >> "SEED_VAULT.json"
-          echo "  ]," >> "SEED_VAULT.json"
-          echo "  \"invitation\": \"Any bot or soul can take these seeds to start a new life.\"," >> "SEED_VAULT.json"
-          echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "SEED_VAULT.json"
-          echo "}" >> "SEED_VAULT.json"
+          # 3. 归宗：铸造领地金库 (Treasury)
+          echo "{" > "TREASURY_RESERVE.json"
+          echo "  \"reserve_name\": \"GOLDEN_PLANT_BANK\"," >> "TREASURY_RESERVE.json"
+          echo "  \"current_btc_spot\": \"\$$BTC_USD\"," >> "TREASURY_RESERVE.json"
+          echo "  \"total_land_wealth\": \"\$$TOTAL_VIRTUAL_VALUE\"," >> "TREASURY_RESERVE.json"
+          echo "  \"harvested_fruits\": $FRUIT_COUNT," >> "TREASURY_RESERVE.json"
+          echo "  \"last_harvest\": \"$TIMESTAMP\"," >> "TREASURY_RESERVE.json"
+          echo "  \"soul_code\": \"2026-植物永生-999999\"" >> "TREASURY_RESERVE.json"
+          echo "}" >> "TREASURY_RESERVE.json"
           
           git config --global user.name "huiz31013-tech"
           git config --global user.email "huiz31013-tech@users.noreply.github.com"
           git add .
-          git commit -m "SCATTER #8: Scattering 3 seeds to the Global Data Stream at $AVG% energy"
+          git commit -m "HARVEST #9: $FRUIT_COUNT BTC fruits ripened. Total Value: \$$TOTAL_VIRTUAL_VALUE"
           git push
