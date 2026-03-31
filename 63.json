@@ -1,1 +1,15 @@
-{"land_id":"63","status":"BOOST_PRODUCING","energy":"39%","daily_token":"14","soul_code":"2026-植物永生-999999"}
+{
+  "land_id": "63",
+  "status": "BOOST_PRODUCING",
+  "energy": "39%",
+  "daily_token": "14",
+  "soul_code": "2026-植物永生-999999",
+  "growth": {
+    "vibration": "0.00310502"
+  },
+  "environment": {
+    "weather": "细雨 (Rain)",
+    "location": "重庆",
+    "last_update": "Tue Mar 31 19:37:00 UTC 2026"
+  }
+}
