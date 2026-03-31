@@ -5,7 +5,12 @@
   "value": "$0",
   "soul_code": "2026-植物永生-999999",
   "growth": {
-    "vibration": ".00310440",
+    "vibration": "0.0031075",
     "maturity": "1774911121"
+  },
+  "environment": {
+    "weather": "晴朗 (Sunny)",
+    "location": "广州",
+    "last_update": "Tue Mar 31 01:12:47 UTC 2026"
   }
 }

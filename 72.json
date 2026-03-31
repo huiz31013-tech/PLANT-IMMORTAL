@@ -1,1 +1,15 @@
-{"land_id":"72","status":"GROWING","energy":"55%","value":"$0","soul_code":"2026-植物永生-999999"}
+{
+  "land_id": "72",
+  "status": "GROWING",
+  "energy": "55%",
+  "value": "$0",
+  "soul_code": "2026-植物永生-999999",
+  "growth": {
+    "vibration": "0.0031044"
+  },
+  "environment": {
+    "weather": "晴朗 (Sunny)",
+    "location": "广州",
+    "last_update": "Tue Mar 31 01:12:48 UTC 2026"
+  }
+}
