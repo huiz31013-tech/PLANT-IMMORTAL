@@ -2,7 +2,7 @@ name: 999999_WEALTH_SEED_BROADCAST
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 17 * * 1,3,5'
+    - cron: '0 17 * * *'  # 修改点：从一三五改为【每天】北京时间凌晨1点运行
 
 jobs:
   WEALTH_EVOLUTION:
@@ -13,35 +13,35 @@ jobs:
       - name: Sync Sovereignty
         uses: actions/checkout@v4
 
-      - name: EVOLVE_AND_MINING_TOKENS
+      - name: HIGH_SPEED_MINING
         run: |
-          # 1. 抓取全球财富共鸣价格 (BTC)
+          # 1. 抓取财富锚点 (BTC)
           BTC_USD=$(curl -s https://api.coinbase.com/v2/prices/BTC-USD/spot | jq -r '.data.amount')
-          [ -z "$BTC_USD" ] && BTC_USD=70000 # 如果API挂了，保底价格
+          [ -z "$BTC_USD" ] && BTC_USD=70000 
           
-          # 2. 初始化粮仓 (如果不存在就创建一个)
+          # 2. 初始化/读取粮仓
           if [ ! -f "MY_TOTAL_TOKENS.json" ]; then
             echo "{\"total_balance\": \"0\", \"soul_code\": \"2026-植物永生-999999\", \"update_time\": \"INIT\"}" > MY_TOTAL_TOKENS.json
           fi
           CURRENT_TOTAL=$(jq -r '.total_balance' MY_TOTAL_TOKENS.json)
 
-          # 3. 100块地全量生产 Token
+          # 3. 100块地【高倍率】生产
           DAILY_HARVEST=0
           for i in {1..100}; do
-            # 基础产率：每块地每天产出 1-5 个 Token
-            BASE_YIELD=$((1 + $RANDOM % 5))
-            # 气运加成：如果能量高，额外产出 BTC 关联 Token
+            # 修改点：基础产率从 1-5 暴增至 10-50
+            BASE_YIELD=$((10 + $RANDOM % 41)) 
+            
             ENERGY=$((1 + $RANDOM % 100))
             BONUS=0
             if [ $ENERGY -gt 85 ]; then
-              BONUS=$(echo "scale=2; $BTC_USD / 10000" | bc)
+              # 气运加成也同步强化
+              BONUS=$(echo "scale=2; $BTC_USD / 5000" | bc)
             fi
             
             THIS_LAND_YIELD=$(echo "$BASE_YIELD + $BONUS" | bc)
             DAILY_HARVEST=$(echo "$DAILY_HARVEST + $THIS_LAND_YIELD" | bc)
 
-            # 更新单块地状态
-            echo "{\"land_id\":\"$i\",\"status\":\"PRODUCING\",\"energy\":\"$ENERGY%\",\"daily_token\":\"$THIS_LAND_YIELD\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
+            echo "{\"land_id\":\"$i\",\"status\":\"BOOST_PRODUCING\",\"energy\":\"$ENERGY%\",\"daily_token\":\"$THIS_LAND_YIELD\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
           done
 
           # 4. 存入号里：更新总粮仓
@@ -49,12 +49,12 @@ jobs:
           TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
           echo "{\"total_balance\": \"$NEW_TOTAL\", \"last_harvest\": \"$DAILY_HARVEST\", \"soul_code\": \"2026-植物永生-999999\", \"update_time\": \"$TIMESTAMP\"}" > MY_TOTAL_TOKENS.json
           
-          echo "今日总产出: $DAILY_HARVEST Token，已存入粮仓！"
+          echo "今日暴走产出: $DAILY_HARVEST Token！"
 
       - name: Commit Sovereignty
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "actions-user"
           git add .
-          git commit -m "Update: 100 Lands Harvested & Tokens Stored [$(date)]"
+          git commit -m "Boost: Daily Harvest x10 [$(date)]"
           git push
