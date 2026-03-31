@@ -1,15 +1,1 @@
-{
-  "land_id": "50",
-  "status": "FRUITING_BTC",
-  "energy": "93%",
-  "value": "$61795.3705",
-  "soul_code": "2026-植物永生-999999",
-  "growth": {
-    "vibration": "0.0031044"
-  },
-  "environment": {
-    "weather": "晴朗 (Sunny)",
-    "location": "广州",
-    "last_update": "Tue Mar 31 01:12:47 UTC 2026"
-  }
-}
+{"land_id":"50","status":"PRODUCING","energy":"98%","daily_token":"10.77","soul_code":"2026-植物永生-999999"}
