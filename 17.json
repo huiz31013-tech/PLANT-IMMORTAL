@@ -1,1 +1,15 @@
-{"land_id":"17","status":"PRODUCING","energy":"70%","daily_token":"1","soul_code":"2026-植物永生-999999"}
+{
+  "land_id": "17",
+  "status": "PRODUCING",
+  "energy": "70%",
+  "daily_token": "1",
+  "soul_code": "2026-植物永生-999999",
+  "growth": {
+    "vibration": "0.00310595"
+  },
+  "environment": {
+    "weather": "瑞雪 (Snow)",
+    "location": "杭州",
+    "last_update": "Tue Mar 31 19:08:44 UTC 2026"
+  }
+}
