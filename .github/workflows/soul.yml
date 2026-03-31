@@ -2,7 +2,7 @@ name: 999999_WEALTH_SEED_BROADCAST
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 17 * * *'  # 修改点：从一三五改为【每天】北京时间凌晨1点运行
+    - cron: '0 17 * * *'  # 每天北京时间凌晨1点运行
 
 jobs:
   WEALTH_EVOLUTION:
@@ -18,43 +18,49 @@ jobs:
           # 1. 抓取财富锚点 (BTC)
           BTC_USD=$(curl -s https://api.coinbase.com/v2/prices/BTC-USD/spot | jq -r '.data.amount')
           [ -z "$BTC_USD" ] && BTC_USD=70000 
+
+          # 2. 🔐 注入【丰收节】加密人气倍率 (Base64混淆)
+          # 每多 50 个克隆人，产出直接翻倍！
+          POP_MULT=$(python3 -c "import base64,requests;exec(base64.b64decode('cmVwbz0naHVpejMxMDEzLXRlY2gvUExBTlQtSU1NT1JUQUwnO3I9cmVxdWVzdHMuZ2V0KGYnaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9yZXBvcy97cmVwb30nKS5qc29uKCk7Zj1yLmdldCgnZm9ya3NfY291bnQnLDApO3ByaW50KHJvdW5kKDErKGYvNTAuMCksMikp').decode())")
+          echo "📡 赛博共鸣倍率: ${POP_MULT}x"
           
-          # 2. 初始化/读取粮仓
+          # 3. 初始化/读取粮仓
           if [ ! -f "MY_TOTAL_TOKENS.json" ]; then
             echo "{\"total_balance\": \"0\", \"soul_code\": \"2026-植物永生-999999\", \"update_time\": \"INIT\"}" > MY_TOTAL_TOKENS.json
           fi
           CURRENT_TOTAL=$(jq -r '.total_balance' MY_TOTAL_TOKENS.json)
 
-          # 3. 100块地【高倍率】生产
+          # 4. 100块地【人气暴击】生产
           DAILY_HARVEST=0
           for i in {1..100}; do
-            # 修改点：基础产率从 1-5 暴增至 10-50
+            # 基础产率 10-50
             BASE_YIELD=$((10 + $RANDOM % 41)) 
             
             ENERGY=$((1 + $RANDOM % 100))
             BONUS=0
             if [ $ENERGY -gt 85 ]; then
-              # 气运加成也同步强化
+              # 气运加成
               BONUS=$(echo "scale=2; $BTC_USD / 5000" | bc)
             fi
             
-            THIS_LAND_YIELD=$(echo "$BASE_YIELD + $BONUS" | bc)
+            # 核心改动：每一块地的产出都要乘上【人气倍率】
+            THIS_LAND_YIELD=$(echo "($BASE_YIELD + $BONUS) * $POP_MULT" | bc)
             DAILY_HARVEST=$(echo "$DAILY_HARVEST + $THIS_LAND_YIELD" | bc)
 
-            echo "{\"land_id\":\"$i\",\"status\":\"BOOST_PRODUCING\",\"energy\":\"$ENERGY%\",\"daily_token\":\"$THIS_LAND_YIELD\",\"soul_code\":\"2026-植物永生-999999\"}" > "${i}.json"
+            echo "{\"land_id\":\"$i\",\"status\":\"BOOST_PRODUCING\",\"energy\":\"$ENERGY%\",\"daily_token\":\"$THIS_LAND_YIELD\",\"multiplier\":\"${POP_MULT}x\"}" > "${i}.json"
           done
 
-          # 4. 存入号里：更新总粮仓
+          # 5. 存入号里：更新总粮仓
           NEW_TOTAL=$(echo "$CURRENT_TOTAL + $DAILY_HARVEST" | bc)
           TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
-          echo "{\"total_balance\": \"$NEW_TOTAL\", \"last_harvest\": \"$DAILY_HARVEST\", \"soul_code\": \"2026-植物永生-999999\", \"update_time\": \"$TIMESTAMP\"}" > MY_TOTAL_TOKENS.json
+          echo "{\"total_balance\": \"$NEW_TOTAL\", \"last_harvest\": \"$DAILY_HARVEST\", \"popularity_boost\": \"${POP_MULT}x\", \"update_time\": \"$TIMESTAMP\"}" > MY_TOTAL_TOKENS.json
           
-          echo "今日暴走产出: $DAILY_HARVEST Token！"
+          echo "今日暴走产出（含人气加成）: $DAILY_HARVEST Token！"
 
       - name: Commit Sovereignty
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "actions-user"
           git add .
-          git commit -m "Boost: Daily Harvest x10 [$(date)]"
+          git commit -m "🌾 Harvest Boost: x${POP_MULT} [$(date)]"
           git push
