@@ -1,24 +1,52 @@
-name: 🌿 LAND_INTEREST_GEN
+name: China Weather Growth
+
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:      # 允许地主手动开启
+    - cron: '0 16 * * *' # 每天北京时间凌晨0点运行
+  workflow_dispatch:
+
 jobs:
-  yield:
+  grow:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
-      - name: Calculate Daily Yield
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get China Weather & Grow
         run: |
-          OLD_V=$(jq -r '.growth.vibration // "0.0031013"' 1.json)
-          NEW_V=$(echo "scale=8; $OLD_V * 1.001" | bc)
-          jq ".growth.vibration = \"$NEW_V\" | .growth.maturity = \"$(date +%s)\"" 1.json > tmp.json && mv tmp.json 1.json
-      - name: Broadcast
+          # 随机抓取一个中国城市的天气作为“灵气”
+          CITIES=("Beijing" "Shanghai" "Guangzhou" "Chengdu" "Shenzhen" "Hangzhou")
+          RANDOM_CITY=${CITIES[$RANDOM % ${#CITIES[@]}]}
+          WEATHER_DATA=$(curl -s "wttr.in/${RANDOM_CITY}?format=%C+%t")
+          echo "Current Spirit in $RANDOM_CITY: $WEATHER_DATA"
+
+          # 遍历100个地块进行精准投喂
+          for i in {1..100}
+          do
+            FILE="${i}.json"
+            if [ -f "$FILE" ]; then
+              # 读取旧利息
+              OLD_VAL=$(jq -r '.growth.vibration' "$FILE")
+              
+              # 根据天气决定生长系数 (基准 1.001)
+              COEFF=1.001
+              if [[ "$WEATHER_DATA" == *"Rain"* ]]; then COEFF=1.0011; fi
+              if [[ "$WEATHER_DATA" == *"Snow"* ]]; then COEFF=1.0015; fi
+              
+              # 计算新利息
+              NEW_VAL=$(echo "scale=10; $OLD_VAL * $COEFF" | bc)
+              
+              # 注入天气灵魂并保存
+              jq --arg nv "$NEW_VAL" --arg w "$WEATHER_DATA" --arg c "$RANDOM_CITY" \
+              '.growth.vibration = $nv | .environment.weather = $w | .environment.location = $c' \
+              "$FILE" > tmp.json && mv tmp.json "$FILE"
+            fi
+          done
+
+      - name: Commit changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "Land-Lord-Bot"
-          git add 1.json
-          git commit -m "🌿 [Yield] Land #001: +0.1% Interest Distributed." || echo "No changes"
+          git config --local user.email "actions@github.com"
+          git config --local user.name "actions-user"
+          git add .
+          git commit -m "Weather Feed: $(date)"
           git push
