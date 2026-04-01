@@ -11,3 +11,4 @@ This repository contains **100 Digital Lands** governed by the #10 Wealth Protoc
 
 ---
 *Created by huiz31013-tech. All rights reserved by the Prime Soul.*
+https://whatsapp.com/channel/0029VbD6e1NLI8YfDQPo9r3H
