@@ -1,14 +1,1 @@
-{
-  "land_id": "76",
-  "status": "TREASURE_HUNTING",
-  "yield": "50.49",
-  "fng": "13",
-  "growth": {
-    "vibration": "0.0031044"
-  },
-  "environment": {
-    "weather": "晴朗 (Sunny)",
-    "location": "上海",
-    "last_update": "Tue Apr  7 19:41:27 UTC 2026"
-  }
-}
+{"land_id":"76","status":"TREASURE_HUNTING","yield":"85.05","fng":"11"}
